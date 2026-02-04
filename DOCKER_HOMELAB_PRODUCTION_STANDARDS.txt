@@ -217,7 +217,8 @@ security_opt:
 cap_drop:
   - ALL
 
-read_only: true
+read_only: true is default
+Writable mounts MUST be explicitly documented and justifiedread_only: true
 
 tmpfs:
   - /tmp
@@ -238,6 +239,7 @@ pids_limit: 100
 - Use Docker secrets mechanism (file-based)
 - Applications must read secrets from files
 - Secrets must not appear in logs, images, or git
+- ${SERVER_ROOT}/secrets/nextcloud/db_password.txt:/run/secrets/db_password:ro
 
 6.3 Prohibited Practices
 - Do NOT store secrets in .env files
@@ -281,8 +283,10 @@ Example:
 - All persistent storage MUST use explicitly named Docker volumes
 - Anonymous volumes are prohibited
 - Implicit volumes are prohibited
-- Direct bind mounts are prohibited unless wrapped through a named volume
 - Every mount must map through a named volume
+- Raw bind mounts in services.volumes are prohibited
+- Bind-backed named volumes ARE REQUIRED for persistence
+- All host paths must be referenced only via named volumes
 
 
 7.5 Volume Naming Convention
